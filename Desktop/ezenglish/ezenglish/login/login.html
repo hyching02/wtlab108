@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  <title>登入</title>
+  <!--CSS-->
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+  <!--google icon-->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <!-- Custom styles for this template -->
+  <link rel="stylesheet" href="css/login.css">
+
+  <!--JavaScript-->
+  <!-- Bootstrap JS -->
+  <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js"></script>
+  <script src="login.js"></script>
+</head>
+
+<body onload='check()'>
+  <div class="container">
+    <br /><br />
+    <form class="form-signin" action="php/login.php" method="POST">
+      <h2 class="form-signin-heading">Please sign in</h2>
+      <div class="form-div">
+        <i class="material-icons">person</i>
+        <input type="text" class="form-control form-singin-input" id="account" name="account" placeholder="Account"
+          required autofocus>
+      </div>
+      <div class="form-div">
+        <i class="material-icons">vpn_key</i>
+        <input type="password" class="form-control form-singin-input" id="password" name="password"
+          placeholder="Password" required>
+      </div>
+      <div class="form-div">
+        <input type="checkbox" class="checkbox" id="show_password">顯示密碼</br>
+      </div>
+      <div class="form-div">
+        <input type="submit" class="btn btn-outline-dark btn-block " value="Log in"></input>
+        <input type="button" class="btn btn-outline-dark btn-block " value="Sign up"
+          onclick=" window.location = 'register.html'"></input>
+      </div>
+    </form>
+  </div>
+</body>
+
+</html>

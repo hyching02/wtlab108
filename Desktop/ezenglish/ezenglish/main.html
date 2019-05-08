@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<head>
+	<meta charset = "UTF-8">
+	<title>ezEnglish</title>
+	<script src="RecordRTC.js"></script>
+	<script src="adapter-latest.js"></script>
+</head>
+<body>
+	<h1>experience proves this<h1>
+	<button id="btn-start-recording">Start</button>
+	<button id="btn-stop-recording" disabled>Stop</button>
+	<audio></audio>
+	<h2>辨識結果:</h2>
+	<span style="color:red;font-size:36px;font-weight:bold;" id="AnswerBox"></span>
+<script>
+	var audio = document.querySelector('audio');
+
+	function captureMicrophone(callback) {
+    	navigator.mediaDevices.getUserMedia({audio: true}).then(callback).catch(function(error) {
+    	    alert('Unable to access your microphone.');
+    	    console.error(error);
+    	});
+	}
+
+	function stopRecordingCallback() {
+	    audio.srcObject = null;
+	    var blob = recorder.getBlob();
+	    audio.src = URL.createObjectURL(blob);
+	
+	    recorder.microphone.stop();
+	}
+
+	var recorder; // globally accessible
+
+	document.getElementById('btn-start-recording').onclick = function() {
+		document.getElementById("AnswerBox").innerHTML =  "";
+	    this.disabled = true;
+	    captureMicrophone(function(microphone) {
+	        audio.srcObject = microphone;
+
+	        recorder = RecordRTC(microphone, {
+	            type: 'audio',
+	            recorderType: StereoAudioRecorder,
+	            desiredSampRate: 16000
+	        });
+	
+	        recorder.startRecording();
+	
+	        // release microphone on stopRecording
+	        recorder.microphone = microphone;
+	
+	        document.getElementById('btn-stop-recording').disabled = false;
+	    });
+	};
+	
+	document.getElementById('btn-stop-recording').onclick = function() {
+		this.disabled = true;
+	    recorder.stopRecording(function() {   
+	    	var blob = recorder.getBlob();
+	        var filename =  createFilename();
+	        var xhr=new XMLHttpRequest();
+	        var fd=new FormData();
+	        fd.append("audio_data",blob, filename);
+	        xhr.open("POST","upload.php",true);
+	      	xhr.send(fd);
+	        setTimeout(function(){ document.getElementById("AnswerBox").innerHTML = "分數: " + getCookie(); }, 1500);
+	    });
+	    document.getElementById('btn-start-recording').disabled = false;
+	};
+	
+	function createFilename(){
+		var today = new Date();
+		var id = "12549638";
+	        var year = format(today.getFullYear());
+	        var month = format(today.getMonth() + 1);
+	        var day = format(today.getDate());
+	        var hour = format(today.getHours());
+	        var minute = format(today.getMinutes());
+	        var second = format(today.getSeconds());
+	        var millisecond = millisecondFormat(today.getMilliseconds());
+		var filename =  year + month + day + hour + minute + second + millisecond + ".wav" + id;
+		return filename;
+	}
+	
+	function format(num){
+		if(num < 10)
+			num = "0" + num.toString();
+		return num;
+	}
+	
+	function millisecondFormat(num){
+		if(num < 10)
+			num = "00" + num.toString();
+	        else
+			if(num < 100)
+		num = "0" + num.toString();
+		return num;
+	}
+	
+	function getCookie(){
+		var Cookie = decodeURIComponent(document.cookie);
+		var result = "";
+		for (var i = 6 ; i < Cookie.length ; i++){
+			if (Cookie.charAt(i) == '+')
+	    		result += ' ';
+	    	else
+				result += Cookie.charAt(i);
+		}
+		return result;
+	}
+</script>
+</body>

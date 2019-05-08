@@ -1,0 +1,10 @@
+body{
+   background-image: url( "http://s3.amazonaws.com/caself/products/photos/000/000/861/original/egg_shell.png?1506350979" );
+   font-family:verdana,Microsoft JhengHei;
+}
+
+.form-signin{
+   max-width" 600px;
+   padding: 15px;
+   margin: 0 auto;
+}
